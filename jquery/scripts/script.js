@@ -6,6 +6,10 @@ var elements = {
     sendButton: "#enviar"
 }
 
+var keybindings = {
+    sendMessage: 13
+}
+
 function sendMessage() {
     var date = new Date()
     $(elements.chatlog).append(
@@ -17,7 +21,7 @@ function sendMessage() {
 $(document).ready(function () {
     $(elements.sendButton).click(sendMessage)
     $(elements.messageInput).keypress(function (e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode == keybindings.sendMessage) {
             sendMessage()
         }
     })
