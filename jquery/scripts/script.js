@@ -1,15 +1,22 @@
 'use strict';
 
-function sendMessage() {
-    var date = new Date()
-    $("#chatlog").append('[' + date.toISOString() + ']&nbsp;&nbsp;&nbsp;' + $("#mensagem").val()+ "<br>")
-    $("#mensagem").val('')
-    $("#mensagem").focus()
+var elements = {
+    chatlog: "#chatlog",
+    messageInput: "#mensagem",
+    sendButton: "#enviar"
 }
 
-$( document ).ready(function(){
-    $("#enviar").click(sendMessage)
-    $("#mensagem").keypress(function(e) {
+function sendMessage() {
+    var date = new Date()
+    $(elements.chatlog).append(
+        '[' + date.toISOString() + ']&nbsp;&nbsp;&nbsp;' + $(elements.messageInput).val() + "<br>"
+    )
+    $(elements.messageInput).val('').focus()
+}
+
+$(document).ready(function () {
+    $(elements.sendButton).click(sendMessage)
+    $(elements.messageInput).keypress(function (e) {
         if (e.keyCode == 13) {
             sendMessage()
         }
