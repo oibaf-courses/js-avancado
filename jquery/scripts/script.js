@@ -1,5 +1,7 @@
 'use strict';
 
+var termSeparator = '&nbsp;&nbsp;&nbsp;'
+
 var elements = {
     chatlog: "#chatlog",
     messageInput: "#mensagem",
@@ -10,10 +12,15 @@ var keybindings = {
     sendMessage: 13
 }
 
-function sendMessage() {
+function isoDateForLog() {
     var date = new Date()
+    return '[' + date.toISOString() + ']'
+}
+
+function sendMessage() {
+    
     $(elements.chatlog).append(
-        '[' + date.toISOString() + ']&nbsp;&nbsp;&nbsp;' + $(elements.messageInput).val() + "<br>"
+        isoDateForLog() + termSeparator + $(elements.messageInput).val() + "<br>"
     )
     $(elements.messageInput).val('').focus()
 }
