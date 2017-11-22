@@ -11,10 +11,11 @@ var consts =  {
     css: {
         okClass: "alert alert-secondary",
         errorClass: "alert alert-danger",
+        warningClass: "alert alert-warning"
     }
 }
 
-function Request($method, $URL, $callbackSuccess, $callbackFailure) {
+function Request($method, $URL, $callbackSuccess, $callbackFailure, $callbackProgress) {
     var xhttp;
     if(window.XMLHttpRequest) {
         xhttp = new XMLHttpRequest()
@@ -32,8 +33,19 @@ function Request($method, $URL, $callbackSuccess, $callbackFailure) {
             }
         }
     }
+    xhttp.onprogress = $callbackProgress
     xhttp.open($method, $URL)
     xhttp.send();
+}
+
+function carregando(oEvent) {
+    var mensagem = "Estamos carregando ;) Já foi.."+oEvent.loaded
+    var alert = document.createElement("div")
+    $(alert).addClass(consts.css.warningClass)
+        .html(mensagem)
+    $(consts.elements.placeholder).empty()
+        .append(alert)
+    console.log(mensagem)
 }
 
 function listaUsuarios(usuariosJSONString) {
@@ -49,10 +61,14 @@ function listaUsuarios(usuariosJSONString) {
     */
     var usuarios = JSON.parse(usuariosJSONString)
     if(usuarios instanceof Array) {
+        var tableElement = document.createElement("table")
+        $(tableElement).addClass("table")
         var ulElement = document.createElement("ul")
+        $(ulElement).addClass("list-group")
         usuarios.forEach(element => {
             var liElement = document.createElement("li")
             liElement.innerHTML = [element.name, element.email, element.phone].join(" :: ")
+            $(liElement).addClass("list-group-item")
             ulElement.appendChild(liElement)
         });
         $(consts.elements.placeholder).empty()
@@ -89,5 +105,5 @@ function informaErro(erroMsg, erroCodigo) {
 }
 
 $(document).ready(function () {
-    Request("GET", consts.ulrs.usuario, listaUsuarios, informaErro);
+    Request("GET", consts.ulrs.usuario, listaUsuarios, informaErro, carregando);
 })
