@@ -7,10 +7,14 @@ var consts =  {
     },
     elements: {
         placeholder: "#placeholder"
+    },
+    css: {
+        okClass: "alert alert-secondary",
+        errorClass: "alert alert-danger",
     }
 }
 
-function Request($method, $URL, $callbackSuccess) {
+function Request($method, $URL, $callbackSuccess, $callbackFailure) {
     var xhttp;
     if(window.XMLHttpRequest) {
         xhttp = new XMLHttpRequest()
@@ -19,8 +23,13 @@ function Request($method, $URL, $callbackSuccess) {
     }
 
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status ==200) {
-            $callbackSuccess(this.response)
+        if (this.readyState == 4) {
+            if(this.status > 199 && this.status < 300) {
+                $callbackSuccess(this.response)
+            }
+            else {
+                $callbackFailure(this.response, this.status)
+            }
         }
     }
     xhttp.open($method, $URL)
@@ -47,7 +56,9 @@ function listaUsuarios(usuariosJSONString) {
             ulElement.appendChild(liElement)
         });
         $(consts.elements.placeholder).empty()
-        $(consts.elements.placeholder).append(ulElement)
+            .removeClass(consts.css.errorClass)
+            .addClass(consts.css.okClass)
+            .append(ulElement)
     }
     else {
         throw {
@@ -57,6 +68,26 @@ function listaUsuarios(usuariosJSONString) {
     }
 }
 
+function informaErro(erroMsg, erroCodigo) {
+    var mensagem
+    switch(erroCodigo) {
+        case 404:
+            mensagem = "Ops, parece que não existe o recurso que eu busquei :P"
+            break
+        case 500:
+            mensagem = "Ocorreu um erro no servidor. Por favor, tente novamente mais tarde."
+            break
+        default:
+            mensagem = erroMsg
+            break
+    }
+    var alert = document.createElement("div")
+    $(alert).addClass(consts.css.errorClass)
+        .html(mensagem)
+    $(consts.elements.placeholder).empty()
+        .append(alert)
+}
+
 $(document).ready(function () {
-    Request("GET", consts.ulrs.usuario, listaUsuarios);
+    Request("GET", consts.ulrs.usuario, listaUsuarios, informaErro);
 })
