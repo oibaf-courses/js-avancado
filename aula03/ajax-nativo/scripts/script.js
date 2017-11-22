@@ -61,8 +61,6 @@ function listaUsuarios(usuariosJSONString) {
     */
     var usuarios = JSON.parse(usuariosJSONString)
     if(usuarios instanceof Array) {
-        var tableElement = document.createElement("table")
-        $(tableElement).addClass("table")
         var ulElement = document.createElement("ul")
         $(ulElement).addClass("list-group")
         usuarios.forEach(element => {
