@@ -33,7 +33,11 @@ const MovingThing = Base => class extends Base {
     }
 };
 
-const GameObjectMixin = Base => class extends Base {};
+const ObjectMixin = Base => class extends Base {};
+
+const Player = ObjectMixin(MovingThing(GameObject));
+const Box = ObjectMixin(MovingThing(GameObject));
+const Wall = GameObject;
 
 class GameBoard {
     constructor() {
@@ -44,11 +48,12 @@ class GameBoard {
     }
 
     addObject(gameObject) {
-        if(!this.detectColision(gameObject)) {
-            
+        if(!this._detectColision(gameObject)) {
+            this.insertObject(gameObject);
         }
+        return this;
     }
-    detectColision(gameObject) {
+    _detectColision(gameObject) {
         return this.board[gameObject.posX][gameObject.posY]!=null;
     }
     insertObject(gameObject) {
