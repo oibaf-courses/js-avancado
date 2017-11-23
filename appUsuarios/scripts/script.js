@@ -30,6 +30,7 @@ window.onload = function() {
         else {
             window.alert("Há campos inválidos!");
         }
+        return false;
     };
 };
 
