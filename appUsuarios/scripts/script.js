@@ -52,5 +52,8 @@ function App() {
 App.prototype.addUsuario = function($usuario) {
     if($usuario instanceof Usuario) {
         this.usuarios.push($usuario);
+        window.localStorage.setItem('usuarios', JSON.stringify(this.usuarios));
     }
 };
+
+// TODO: implementar busca de usuários
