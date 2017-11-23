@@ -39,9 +39,14 @@ window.onload = function() {
 
 class Usuario {
     constructor() {
-        this.nome = arguments[0] || null;
-        this.email = arguments[1] || null;
-        this.telefone = arguments[2] || null;
+        if (arguments[0] && arguments[0] instanceof Object) {
+            Object.assign(this, arguments[0]);
+        }
+        else {
+            this.nome = arguments[0] || null;
+            this.email = arguments[1] || null;
+            this.telefone = arguments[2] || null;
+        }
     }
 }
 
