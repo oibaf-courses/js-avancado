@@ -13,8 +13,13 @@ const GAME_OPTIONS = {
 
 class GameObject {
     constructor() {
-        this.posX = arguments[0] || null;
-        this.posY = arguments[1] || null;
+        if (arguments[0] && arguments[0] instanceof Object) {
+            Object.assign(this, arguments[0]);
+        }
+        else {
+            this.posX = arguments[0] || null;
+            this.posY = arguments[1] || null;
+        }
     }
 }
 
@@ -41,10 +46,15 @@ const Wall = GameObject;
 
 class GameBoard {
     constructor() {
-        // X, Y
-        this.board = [arguments[0] || GAME_OPTIONS.defaultBoardSize]
-            [arguments[1] || GAME_OPTIONS.defaultBoardSize];
-        this.objects = [];
+        if (arguments[0] && arguments[0] instanceof Object) {
+            Object.assign(this, arguments[0]);
+        }
+        else {
+            // X, Y
+            this.board = [arguments[0] || GAME_OPTIONS.defaultBoardSize]
+                [arguments[1] || GAME_OPTIONS.defaultBoardSize];
+            this.objects = [];
+        }
     }
 
     addObject(gameObject) {
