@@ -22,9 +22,12 @@
                 </div>
                 <div class="modal-body">
                     <form id="formulario" class="form">
-                        <label>Nome:</label><input class="form-control" type="text" name="nome" id="nome" required>
-                        <label>Email:</label><input class="form-control" type="email" name="email" id="email" required>
-                        <label>Telefone:</label><input class="form-control" type="tel" name="tel" id="tel" required>
+                        <label>Nome:</label>
+                        <input class="form-control" type="text" name="nome" id="nome" required>
+                        <label>Email:</label>
+                        <input class="form-control" type="email" name="email" id="email" required>
+                        <label>Telefone:</label>
+                        <input class="form-control" type="tel" name="tel" id="tel" required>
                         <input data-toggle="modal" data-target="#incluirModal" class="btn btn-primary" id="sendForm" type="submit" value="Enviar">
                     </form>
                 </div>
@@ -35,8 +38,11 @@
         <div class="row">
             <div class="col">
                 <form id="form_search">
-                    <input class="form-control" type="text" name="search" id="search" onkeyup="app.showUsuariosTable(this.value);">
-                    <input class="btn btn-primary" id="searchUsuario" type="button" value="Pesquisa">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">pesquisa</span>
+                        <input class="form-control" type="text" name="search" id="search" onkeyup="app.showUsuariosTable(this.value);">
+
+                    </div>
                     <button class="btn btn-success" type="button" data-toggle="modal" data-target="#incluirModal">Incluir Usuário</button>
                 </form>
             </div>
