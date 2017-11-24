@@ -9,11 +9,17 @@ const consts = {
     elements: {
         formulario: "formulario",
         tabelaUsuarios: "listaDeUsuarios",
-    }
+    },
+    ulrs: {
+        base: "http://demo9792543.mockable.io/api/v1/",
+        usuario: "http://demo9792543.mockable.io/api/v1/usuario"
+    },
 };
 var window;
 var document;
 var console;
+var XMLHttpRequest;
+var ActiveXObject;
 var app = new App();
 
 window.onload = function () {
@@ -32,9 +38,37 @@ window.onload = function () {
         }
         return false;
     };
-    app.loadUsuarios();
+    Request("GET", consts.ulrs.usuario, loadUsuariosFromAPI);
     app.showUsuariosTable();
 };
+
+function Request($method, $URL, $callbackSuccess, $callbackFailure, $callbackProgress) {
+    var xhttp;
+    if(window.XMLHttpRequest) {
+        xhttp = new XMLHttpRequest()
+    } else {
+        xhttp = new ActiveXObject("Microsoft.XMLHTTP")
+    }
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if(this.status > 199 && this.status < 300) {
+                $callbackSuccess(this.response);
+            }
+            else {
+                $callbackFailure(this.response, this.status);
+            }
+        }
+    }
+    xhttp.onprogress = $callbackProgress;
+    xhttp.open($method, $URL);
+    xhttp.send();
+};
+
+function loadUsuariosFromAPI(usuariosJSONString) {
+    app.loadUsuarios(usuariosJSONString);
+    app.saveUsuarios();
+}
 
 /*
  */
@@ -44,9 +78,9 @@ class Usuario {
         if (arguments[0] && arguments[0] instanceof Object) {
             Object.assign(this, arguments[0]);
         } else {
-            this.nome = arguments[0] || null;
+            this.name = arguments[0] || null;
             this.email = arguments[1] || null;
-            this.telefone = arguments[2] || null;
+            this.phone = arguments[2] || null;
         }
     }
 }
@@ -77,7 +111,7 @@ App.prototype.saveUsuarios = function () {
 };
 
 App.prototype.loadUsuarios = function () {
-    var usuarios = JSON.parse(window.localStorage.getItem('usuarios'));
+    var usuarios = JSON.parse(arguments[0]) || JSON.parse(window.localStorage.getItem('usuarios'));
     usuarios.forEach(usuario => {
         this.addUsuario(new Usuario(usuario), false);
     });
@@ -96,11 +130,11 @@ App.prototype.showUsuariosTable = function () {
         if (JSON.stringify(Object.values(usuario)).toLowerCase().includes(filtro)) {
             var tr = document.createElement('tr');
             var nome = document.createElement('td');
-            nome.innerText = usuario.nome;
+            nome.innerText = usuario.name;
             var email = document.createElement('td');
             email.innerText = usuario.email;
             var telefone = document.createElement('td');
-            telefone.innerText = usuario.telefone;
+            telefone.innerText = usuario.phone;
             tr.appendChild(nome);
             tr.appendChild(email);
             tr.appendChild(telefone);
